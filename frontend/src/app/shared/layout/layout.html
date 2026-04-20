@@ -1,0 +1,17 @@
+<header class="app-header">
+  <a routerLink="/dashboard" class="brand">DnD Campaign Manager</a>
+
+  <nav class="app-nav">
+    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+    <!-- Campaigns / Characters / Quests links land here as we ship each phase. -->
+  </nav>
+
+  <div class="app-actions">
+    <!-- Placeholder. Wired to real sign-out in Phase 3. -->
+    <a routerLink="/login">Sign out</a>
+  </div>
+</header>
+
+<main class="app-main">
+  <router-outlet />
+</main>
