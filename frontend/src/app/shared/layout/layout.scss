@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  color: #111;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.brand {
+  font-weight: 600;
+  color: #111;
+  text-decoration: none;
+}
+
+.app-nav {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+
+  a {
+    color: #4b5563;
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+
+    &:hover {
+      background: #eef2ff;
+    }
+
+    &.active {
+      background: #e0e7ff;
+      color: #1e3a8a;
+    }
+  }
+}
+
+.app-actions a {
+  color: #6b7280;
+  text-decoration: none;
+
+  &:hover {
+    color: #111;
+  }
+}
+
+.app-main {
+  padding: 2rem 1.5rem;
+}
