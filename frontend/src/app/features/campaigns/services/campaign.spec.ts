@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Campaign } from './campaign';
+import { CampaignService } from './campaign';
 
-describe('Campaign', () => {
-  let service: Campaign;
+describe('CampaignService', () => {
+  let service: CampaignService;
 
   beforeEach(() => {
+    localStorage.clear();
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Campaign);
+    service = TestBed.inject(CampaignService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('seeds campaigns when localStorage is empty', () => {
+    expect(service.campaigns().length).toBeGreaterThan(0);
   });
 });
