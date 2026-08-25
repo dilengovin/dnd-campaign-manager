@@ -1,33 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Campaign } from '../models/campaign';
 
-const SEED: Campaign[] = [
-  {
-    id: crypto.randomUUID(),
-    name: 'Lost Mines of Phandelver',
-    description: 'A classic starter campaign in the Sword Coast.',
-    dmName: 'You',
-    players: ['Alice', 'Bob', 'Charlie'],
-    notes: '',
-  },
-  {
-    id: crypto.randomUUID(),
-    name: 'Curse of Strahd',
-    description: 'A gothic horror campaign set in Barovia.',
-    dmName: 'Morgan',
-    players: ['Dylan', 'Eve', 'Frank'],
-    notes: 'Party just arrived in Vallaki.',
-  },
-  {
-    id: crypto.randomUUID(),
-    name: 'Homebrew: Shattered Realms',
-    description: 'A custom campaign spanning multiple fractured planes.',
-    dmName: 'You',
-    players: ['Gina', 'Hector'],
-    notes: 'Focus on political intrigue and planar travel.',
-  },
-];
-
 const STORAGE_KEY = 'dnd.campaigns';
 
 @Injectable({ providedIn: 'root' })
@@ -39,16 +12,16 @@ export class CampaignService {
   readonly campaigns = this._campaigns.asReadonly();
   
   constructor() {
-    const stored = this.load();
-    this._campaigns.set(stored.length ? stored : [...SEED]);
-    if (!stored.length) this.persist();
+    this._campaigns.set(this.load());
   }
 
   private load(): Campaign[] {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     try {
-      return JSON.parse(raw) as Campaign[];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error('not a list of campaigns');
+      return parsed as Campaign[];
     } catch {
       console.warn('Corrupt campaigns in localStorage — starting fresh.');
       return [];
