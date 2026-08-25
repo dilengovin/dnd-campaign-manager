@@ -18,3 +18,8 @@ yarn-error.log*
 
 # Angular (frontend/) and Node (backend/, later) have their own .gitignore files
 # that cover build output, node_modules, caches, etc.
+
+# ---- Stray root lockfile ----
+# There is no package.json at the repo root; npm run from here leaves an empty
+# lockfile behind. Anchored to the root so frontend/package-lock.json still tracks.
+/package-lock.json
