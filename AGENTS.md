@@ -1,7 +1,7 @@
 # DnD Campaign Manager
 
 Angular 21 frontend (standalone, signals, zoneless) for managing D&D campaigns.
-NestJS backend arrives in Phase 3.
+NestJS + Postgres backend in `backend/` (Phase 3, in progress).
 
 ## Agent skills
 
@@ -19,6 +19,6 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/
 
 ### Running the app
 
-How to serve the frontend and how to check a change on screen in a real browser.
-See `.claude/skills/run-the-app/SKILL.md`, which also records which of the three
-suites answers which kind of question.
+How to serve the frontend and the backend, and how to check a change on screen
+in a real browser. See `.claude/skills/run-the-app/SKILL.md`, which also records
+which suite answers which kind of question.

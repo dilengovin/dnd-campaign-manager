@@ -1,0 +1,7 @@
+-- The initial migration of the walking skeleton. It creates no tables, because
+-- this slice has no User, no Session and no Campaign: it exists so the database
+-- carries a migration history from its first boot, and so `migrate deploy`
+-- is the only thing that has ever shaped it.
+--
+-- The User arrives with registration. The Campaign arrives in `campaigns-api`,
+-- owned from its first migration (ADR-0002).

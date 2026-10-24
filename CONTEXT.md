@@ -18,6 +18,21 @@ User: the one whose account it lives in. No field on a Campaign names this
 person — it is who you are signed in as.
 _Avoid_: Account, profile, owner
 
+**Email**:
+The one thing a User is identified by. Unique across the app, and never shown
+on any screen — it is how you sign in, not something anyone looks at.
+_Avoid_: Username, login, handle, address
+
+**Session**:
+The signed-in state a User holds, from signing in until they sign out or it
+expires. A User with no Session sees only the sign-in and registration screens.
+_Avoid_: Token, auth, credentials, logged-in state
+
+**Sign in**:
+What a User does to start a Session, and the canonical verb for it everywhere —
+in prose, in UI copy, and in test names. Signing out ends a Session.
+_Avoid_: Log in, log on, authenticate, sign on
+
 **Dungeon Master**:
 The person who runs a Campaign, recorded as a name. Often the User themselves,
 but not necessarily — you can record a Campaign someone else runs. A Dungeon

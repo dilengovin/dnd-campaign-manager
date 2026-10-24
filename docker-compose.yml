@@ -1,0 +1,29 @@
+# Postgres for the backend. One service, two databases: one the application
+# uses, one the test suite uses (the suite truncates every table between tests,
+# so it must never point at the application's).
+#
+#   docker compose up -d
+#
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: dndcm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dndcm
+      POSTGRES_PASSWORD: dndcm
+      POSTGRES_DB: dndcm
+      TEST_DATABASE_NAME: dndcm_test
+    ports:
+      - '5432:5432'
+    volumes:
+      - dndcm-pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init-test-db.sh:/docker-entrypoint-initdb.d/10-init-test-db.sh:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U dndcm -d dndcm']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  dndcm-pgdata:

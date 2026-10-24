@@ -1,0 +1,10 @@
+# Dependencies
+/node_modules
+
+# Build output
+/dist
+*.tsbuildinfo
+
+# Test / tooling caches
+/coverage
+.jest-cache

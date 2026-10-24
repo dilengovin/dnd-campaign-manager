@@ -1,0 +1,12 @@
+// The schema is empty of models on purpose: this is the walking skeleton.
+// The User arrives with registration; the Campaign arrives in `campaigns-api`,
+// carrying its owner from its first migration (ADR-0002).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
