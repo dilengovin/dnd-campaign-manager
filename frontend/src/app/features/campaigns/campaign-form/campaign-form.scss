@@ -1,0 +1,35 @@
+:host { display: block; }
+
+.campaign-form {
+  max-width: 32rem;
+
+  h1 { margin-top: 0; }
+
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    font: inherit;
+  }
+
+  .error {
+    margin: 0.5rem 0 0;
+    color: var(--color-text-muted);
+  }
+
+  .form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .cancel { color: var(--color-link); }
+}

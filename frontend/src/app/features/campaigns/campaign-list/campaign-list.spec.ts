@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { CampaignList } from './campaign-list';
 import { CampaignService } from '../services/campaign';
+import { Campaign } from '../models/campaign';
 
 describe('CampaignList', () => {
   let fixture: ComponentFixture<CampaignList>;
@@ -23,6 +24,18 @@ describe('CampaignList', () => {
     localStorage.clear();
   });
 
+  /** A Campaign as a User would record it, before it has an id. */
+  function aCampaign(overrides: Partial<Omit<Campaign, 'id'>> = {}): Omit<Campaign, 'id'> {
+    return {
+      name: 'Curse of Strahd',
+      description: 'Gothic horror in Barovia.',
+      dm: 'Morgan',
+      players: ['Dylan', 'Eve'],
+      notes: 'The party has reached the village.',
+      ...overrides,
+    };
+  }
+
   function text(): string {
     return fixture.nativeElement.textContent ?? '';
   }
@@ -41,16 +54,31 @@ describe('CampaignList', () => {
   });
 
   it('drops the empty state once a campaign exists', async () => {
-    TestBed.inject(CampaignService).create({
-      name: 'Curse of Strahd',
-      description: 'Gothic horror in Barovia.',
-      dm: 'Morgan',
-      players: ['Dylan', 'Eve'],
-      notes: 'The party has reached the village.',
-    });
+    TestBed.inject(CampaignService).create(aCampaign());
     await fixture.whenStable();
 
     expect(text()).not.toMatch(/no campaigns yet/i);
-    expect(fixture.nativeElement.querySelector('a[href="/campaigns/new"]')).toBeNull();
+  });
+
+  it('keeps the way to record a campaign once the list is no longer empty', async () => {
+    TestBed.inject(CampaignService).create(aCampaign());
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('a[href="/campaigns/new"]')).not.toBeNull();
+  });
+
+  it('renders one card per campaign, each showing its name', async () => {
+    const service = TestBed.inject(CampaignService);
+    service.create(aCampaign({ name: 'Curse of Strahd' }));
+    service.create(aCampaign({ name: 'Tomb of Annihilation' }));
+    await fixture.whenStable();
+
+    const cards = fixture.nativeElement.querySelectorAll('.campaign-card');
+
+    expect(cards).toHaveLength(2);
+    expect([...cards].map((c: Element) => c.textContent?.trim())).toEqual([
+      'Curse of Strahd',
+      'Tomb of Annihilation',
+    ]);
   });
 });

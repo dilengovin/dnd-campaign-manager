@@ -1,0 +1,17 @@
+<section class="campaign-form">
+  <h1>Record a campaign</h1>
+
+  <form (submit)="$event.preventDefault(); record()">
+    <label for="name">Name</label>
+    <input id="name" type="text" [formField]="campaign.name" />
+
+    @if (campaign.name().touched() && campaign.name().invalid()) {
+      <p class="error">{{ nameRequiredMessage }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="campaign().invalid()">Record campaign</button>
+      <a routerLink="/campaigns" class="cancel">Cancel</a>
+    </div>
+  </form>
+</section>

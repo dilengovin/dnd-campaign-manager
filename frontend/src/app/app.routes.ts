@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { CampaignForm } from './features/campaigns/campaign-form/campaign-form';
 import { CampaignList } from './features/campaigns/campaign-list/campaign-list';
 import { Layout } from './shared/layout/layout';
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
     children: [
       // The Campaign list is the app's home.
       { path: 'campaigns', component: CampaignList },
+      { path: 'campaigns/new', component: CampaignForm },
 
       // The Dashboard was deleted in Phase 2; keep its links resolving.
       { path: 'dashboard', pathMatch: 'full', redirectTo: 'campaigns' },

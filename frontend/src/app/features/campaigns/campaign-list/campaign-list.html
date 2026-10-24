@@ -4,5 +4,13 @@
   @if (campaigns().length === 0) {
     <p class="muted">No campaigns yet. Record the first campaign you run or play in.</p>
     <a routerLink="/campaigns/new" class="cta">Record a campaign</a>
+  } @else {
+    <a routerLink="/campaigns/new" class="cta">Record a campaign</a>
+
+    <ul class="campaign-cards">
+      @for (campaign of campaigns(); track campaign.id) {
+        <li class="campaign-card">{{ campaign.name }}</li>
+      }
+    </ul>
   }
 </section>
