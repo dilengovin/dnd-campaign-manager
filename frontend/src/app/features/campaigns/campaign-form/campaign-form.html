@@ -1,17 +1,80 @@
 <section class="campaign-form">
-  <h1>Record a campaign</h1>
+  <h1>{{ editing() ? 'Edit campaign' : 'Record a campaign' }}</h1>
 
-  <form [formRoot]="campaignForm">
-    <label for="name">Name</label>
-    <input id="name" type="text" [formField]="campaignForm.name" />
+  @if (missing()) {
+    <p class="missing muted">That campaign could not be found. It may have been removed.</p>
+    <a routerLink="/campaigns" class="cancel">Back to campaigns</a>
+  } @else {
+    <form [formRoot]="campaignForm">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" type="text" [formField]="campaignForm.name" />
 
-    @if (campaignForm.name().touched() && campaignForm.name().invalid()) {
-      <p class="error">{{ campaignForm.name().errors()[0]?.message }}</p>
-    }
+        @if (campaignForm.name().touched() && campaignForm.name().invalid()) {
+          <p class="error">{{ campaignForm.name().errors()[0]?.message }}</p>
+        }
+      </div>
 
-    <div class="form-actions">
-      <button type="submit" [disabled]="campaignForm().invalid()">Record campaign</button>
-      <a routerLink="/campaigns" class="cancel">Cancel</a>
-    </div>
-  </form>
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" [formField]="campaignForm.description"></textarea>
+        <p class="hint muted">What the campaign is — its premise or setting.</p>
+      </div>
+
+      <div class="field">
+        <label for="dm">Dungeon Master</label>
+        <input id="dm" type="text" [formField]="campaignForm.dm" />
+        <p class="hint muted">Whoever runs it, yourself included.</p>
+      </div>
+
+      <fieldset class="field players">
+        <legend>Players</legend>
+
+        @if (players().length === 0) {
+          <p class="muted">No players added yet.</p>
+        } @else {
+          <ul class="player-list plain-list">
+            @for (player of players(); track $index) {
+              <li class="player">
+                <span class="player-name">{{ player }}</span>
+                <button
+                  type="button"
+                  class="remove-player link-button"
+                  [attr.aria-label]="'Remove ' + player"
+                  (click)="removePlayer($index)"
+                >
+                  Remove
+                </button>
+              </li>
+            }
+          </ul>
+        }
+
+        <div class="add-player">
+          <label for="player-to-add">Add a player</label>
+          <input
+            id="player-to-add"
+            type="text"
+            [value]="playerToAdd()"
+            (input)="onPlayerToAddInput($event)"
+            (keydown.enter)="$event.preventDefault(); addPlayer()"
+          />
+          <button type="button" class="add" (click)="addPlayer()">Add player</button>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="notes">Notes</label>
+        <textarea id="notes" rows="5" [formField]="campaignForm.notes"></textarea>
+        <p class="hint muted">Where the campaign has got to. You will come back to this one.</p>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="campaignForm().invalid()">
+          {{ editing() ? 'Save changes' : 'Record campaign' }}
+        </button>
+        <a [routerLink]="cancelTarget()" class="cancel">Cancel</a>
+      </div>
+    </form>
+  }
 </section>

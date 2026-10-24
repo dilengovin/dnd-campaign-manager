@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { CampaignService } from './campaign';
 import { Campaign } from '../models/campaign';
+import { aCampaign } from '../campaign.fixture';
 
 /**
  * Damaged storage has no public cause — nothing the service offers can produce
@@ -12,18 +13,6 @@ import { Campaign } from '../models/campaign';
 const STORAGE_KEY = 'dnd.campaigns';
 function damageStoredCampaigns(raw: string): void {
   localStorage.setItem(STORAGE_KEY, raw);
-}
-
-/** A Campaign as a User would record it, before it has an id. */
-function aCampaign(overrides: Partial<Omit<Campaign, 'id'>> = {}): Omit<Campaign, 'id'> {
-  return {
-    name: 'Curse of Strahd',
-    description: 'Gothic horror in Barovia.',
-    dm: 'Morgan',
-    players: ['Dylan', 'Eve'],
-    notes: 'The party has reached the village.',
-    ...overrides,
-  };
 }
 
 /**

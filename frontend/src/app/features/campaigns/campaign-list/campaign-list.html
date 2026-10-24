@@ -8,9 +8,46 @@
   <a routerLink="/campaigns/new" class="cta">Record a campaign</a>
 
   @if (campaigns().length > 0) {
-    <ul class="campaign-cards">
+    <ul class="campaign-cards plain-list">
       @for (campaign of campaigns(); track campaign.id) {
-        <li class="campaign-card">{{ campaign.name }}</li>
+        <li class="campaign-card">
+          <h2 class="campaign-name">
+            <a [routerLink]="['/campaigns', campaign.id]">{{ campaign.name }}</a>
+          </h2>
+
+          <!-- Enough to tell one Campaign from another. The Description and the
+               Notes live on the detail page, where they have room. -->
+          <p class="campaign-meta muted">
+            <span class="campaign-dm">{{ campaign.dm || 'No dungeon master recorded' }}</span>
+            <span class="campaign-player-count">{{ playerCount(campaign) }}</span>
+          </p>
+
+          <!-- The question is asked on the card the User clicked, so there is
+               never any doubt about which Campaign is about to go. -->
+          <p class="campaign-actions">
+            @if (isRemoving(campaign)) {
+              <span class="removing-question muted">Remove this campaign for good?</span>
+              <button
+                type="button"
+                class="remove confirm-remove link-button"
+                [attr.aria-label]="'Yes, remove ' + campaign.name"
+                (click)="confirmRemove(campaign)"
+              >
+                Yes, remove it
+              </button>
+              <button type="button" class="cancel-remove link-button" (click)="keep()">Keep it</button>
+            } @else {
+              <button
+                type="button"
+                class="remove link-button"
+                [attr.aria-label]="'Remove ' + campaign.name"
+                (click)="askToRemove(campaign)"
+              >
+                Remove
+              </button>
+            }
+          </p>
+        </li>
       }
     </ul>
   }

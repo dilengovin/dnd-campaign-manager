@@ -116,3 +116,66 @@ test.describe('a click arrives', () => {
     await expect(screenHeading(page, 'Campaigns')).toBeVisible();
   });
 });
+
+test.describe('a campaign has routes of its own', () => {
+  /**
+   * Puts a Campaign in storage before the app boots.
+   *
+   * Deliberately not recorded through the form: driving the form here would
+   * re-assert Campaign behaviour that the unit suite already owns, and this
+   * harness is the router's alone. The storage key is the one piece of the
+   * service's internals this file knows, and Phase 3 replaces it with a seeded
+   * API fixture.
+   */
+  async function aStoredCampaign(page: Page, id: string, name: string): Promise<void> {
+    await page.addInitScript(
+      ([campaignId, campaignName]) => {
+        window.localStorage.setItem(
+          'dnd.campaigns',
+          JSON.stringify([
+            {
+              id: campaignId,
+              name: campaignName,
+              description: '',
+              dm: '',
+              players: [],
+              notes: '',
+            },
+          ]),
+        );
+      },
+      [id, name] as const,
+    );
+  }
+
+  test('opening a campaign from the list lands on a route of its own', async ({ page }) => {
+    await aStoredCampaign(page, 'strahd', 'Curse of Strahd');
+    await page.goto('/campaigns');
+
+    await page.getByRole('link', { name: 'Curse of Strahd' }).click();
+
+    await expect(page).toHaveURL('/campaigns/strahd');
+    await expect(screenHeading(page, 'Curse of Strahd')).toBeVisible();
+  });
+
+  test('editing a campaign lands on the edit route, inside the Layout', async ({ page }) => {
+    await aStoredCampaign(page, 'strahd', 'Curse of Strahd');
+    await page.goto('/campaigns/strahd');
+
+    await page.getByRole('link', { name: 'Edit' }).click();
+
+    await expect(page).toHaveURL('/campaigns/strahd/edit');
+    await expect(screenHeading(page, 'Edit campaign')).toBeVisible();
+    await expect(navigation(page)).toBeVisible();
+  });
+
+  test('the way back from a campaign arrives at the list', async ({ page }) => {
+    await aStoredCampaign(page, 'strahd', 'Curse of Strahd');
+    await page.goto('/campaigns/strahd');
+
+    await page.getByRole('link', { name: 'Back to campaigns' }).click();
+
+    await expect(page).toHaveURL('/campaigns');
+    await expect(screenHeading(page, 'Campaigns')).toBeVisible();
+  });
+});

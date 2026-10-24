@@ -1,0 +1,55 @@
+<!-- Always rendered, including when the campaign is missing: a User who followed
+     a stale link still needs a way out. -->
+<a routerLink="/campaigns" class="back">Back to campaigns</a>
+
+@if (campaign(); as campaign) {
+  <article class="campaign-detail">
+    <header class="campaign-heading">
+      <h1>{{ campaign.name }}</h1>
+      <a [routerLink]="['/campaigns', campaign.id, 'edit']" class="edit">Edit</a>
+    </header>
+
+    <p class="dm">
+      @if (campaign.dm) {
+        Run by <span class="dm-name">{{ campaign.dm }}</span>
+      } @else {
+        <span class="muted">No dungeon master recorded.</span>
+      }
+    </p>
+
+    <section class="description">
+      <h2>Description</h2>
+      @if (campaign.description) {
+        <p>{{ campaign.description }}</p>
+      } @else {
+        <p class="muted">No description recorded.</p>
+      }
+    </section>
+
+    <section class="players">
+      <h2>Players</h2>
+      @if (campaign.players.length > 0) {
+        <ul class="player-list plain-list">
+          @for (player of campaign.players; track $index) {
+            <li class="player">{{ player }}</li>
+          }
+        </ul>
+      } @else {
+        <p class="muted">No players recorded.</p>
+      }
+    </section>
+
+    <!-- Notes last and unbounded: it is the field a User opens the app to read,
+         and the reason this page exists apart from the list. -->
+    <section class="notes">
+      <h2>Notes</h2>
+      @if (campaign.notes) {
+        <p class="notes-body">{{ campaign.notes }}</p>
+      } @else {
+        <p class="muted">Nothing written yet.</p>
+      }
+    </section>
+  </article>
+} @else {
+  <p class="missing muted">That campaign could not be found. It may have been removed.</p>
+}

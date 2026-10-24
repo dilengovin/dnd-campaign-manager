@@ -3,15 +3,22 @@
 .campaign-form {
   max-width: 32rem;
 
-  h1 { margin-top: 0; }
+  .field {
+    margin-top: 1.25rem;
+  }
 
-  label {
+  label,
+  legend {
     display: block;
     margin-bottom: 0.25rem;
     font-weight: 600;
   }
 
-  input {
+  input,
+  textarea {
+    // Border-box so a full-width field stays inside its column rather than
+    // running under the control beside it.
+    box-sizing: border-box;
     width: 100%;
     padding: 0.5rem;
     border: 1px solid var(--color-border);
@@ -19,9 +26,57 @@
     font: inherit;
   }
 
+  textarea {
+    resize: vertical;
+  }
+
+  .hint {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+  }
+
   .error {
     margin: 0.5rem 0 0;
     color: var(--color-text-error);
+  }
+
+  .players {
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    padding: 1rem;
+
+    .player-list {
+      margin-bottom: 0.75rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .player {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.25rem;
+      background: var(--color-surface-raised);
+    }
+
+    // The add control is a row: a field with its own label, then the action.
+    .add-player {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 0.5rem;
+
+      label {
+        grid-column: 1 / -1;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .missing {
+    margin: 0 0 1rem;
   }
 
   .form-actions {

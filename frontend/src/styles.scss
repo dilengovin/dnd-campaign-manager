@@ -25,3 +25,67 @@
   --color-nav-item-selected-surface: #e0e7ff;
   --color-nav-item-selected-text: #1e3a8a;
 }
+
+/*
+ * Shared rules.
+ *
+ * A rule more than one component needs lives here, so a new screen inherits it
+ * rather than re-typing it. A component stylesheet holds only what is genuinely
+ * its own. Note that a component's own copy of one of these would still win on
+ * specificity, so the copies are deleted rather than overridden.
+ */
+
+/* Inherited by every screen, including the auth screens outside the Layout. */
+body {
+  font-family: system-ui, sans-serif;
+}
+
+/* Every screen opens with its title flush to the top of the content area. */
+h1 {
+  margin-top: 0;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+/*
+ * Sign in and Create account are the same card, so the card is defined once
+ * here rather than twice in two component stylesheets that drifted apart.
+ */
+.auth-card {
+  max-width: 28rem;
+  margin: 4rem auto;
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+
+  .switch {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+
+    a {
+      color: var(--color-link);
+    }
+  }
+}
+
+/*
+ * A button that acts on the page rather than navigating, but reads as a link.
+ * Shared by the Players collection and the Campaign cards.
+ */
+.link-button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--color-link);
+  cursor: pointer;
+}
+
+/* A list used for layout rather than for its bullets. */
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
