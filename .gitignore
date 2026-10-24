@@ -23,3 +23,8 @@ yarn-error.log*
 # There is no package.json at the repo root; npm run from here leaves an empty
 # lockfile behind. Anchored to the root so frontend/package-lock.json still tracks.
 /package-lock.json
+
+# ---- Local issue tracker ----
+# .scratch/<feature>/ holds specs and tickets (see AGENTS.md). Local-only by
+# design: it is working context for whoever is at this checkout, not shared state.
+.scratch/
