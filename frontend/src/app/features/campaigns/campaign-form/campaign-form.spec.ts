@@ -36,6 +36,14 @@ describe('CampaignForm', () => {
     return fixture.nativeElement.querySelector('button[type="submit"]');
   }
 
+  /** Clicks the submit button, which is what a User does. */
+  async function clickSubmit(): Promise<void> {
+    submitButton().click();
+    await fixture.whenStable();
+    await Promise.resolve();
+    await fixture.whenStable();
+  }
+
   async function typeName(value: string): Promise<void> {
     const input = nameInput();
     input.value = value;
@@ -46,7 +54,7 @@ describe('CampaignForm', () => {
   it('refuses to record a campaign with no name', async () => {
     expect(submitButton().disabled).toBe(true);
 
-    await fixture.componentInstance.record();
+    await clickSubmit();
 
     expect(service.campaigns()).toEqual([]);
     expect(navigate).not.toHaveBeenCalled();
@@ -57,7 +65,7 @@ describe('CampaignForm', () => {
 
     expect(submitButton().disabled).toBe(true);
 
-    await fixture.componentInstance.record();
+    await clickSubmit();
 
     expect(service.campaigns()).toEqual([]);
   });
@@ -67,7 +75,7 @@ describe('CampaignForm', () => {
 
     expect(submitButton().disabled).toBe(false);
 
-    await fixture.componentInstance.record();
+    await clickSubmit();
 
     expect(service.campaigns()).toHaveLength(1);
     expect(service.campaigns()[0].name).toBe('Curse of Strahd');

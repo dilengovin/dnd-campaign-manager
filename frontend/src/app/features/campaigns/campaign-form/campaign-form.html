@@ -1,16 +1,16 @@
 <section class="campaign-form">
   <h1>Record a campaign</h1>
 
-  <form (submit)="$event.preventDefault(); record()">
+  <form [formRoot]="campaignForm">
     <label for="name">Name</label>
-    <input id="name" type="text" [formField]="campaign.name" />
+    <input id="name" type="text" [formField]="campaignForm.name" />
 
-    @if (campaign.name().touched() && campaign.name().invalid()) {
-      <p class="error">{{ nameRequiredMessage }}</p>
+    @if (campaignForm.name().touched() && campaignForm.name().invalid()) {
+      <p class="error">{{ campaignForm.name().errors()[0]?.message }}</p>
     }
 
     <div class="form-actions">
-      <button type="submit" [disabled]="campaign().invalid()">Record campaign</button>
+      <button type="submit" [disabled]="campaignForm().invalid()">Record campaign</button>
       <a routerLink="/campaigns" class="cancel">Cancel</a>
     </div>
   </form>
