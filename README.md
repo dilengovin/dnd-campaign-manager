@@ -43,13 +43,18 @@ docker compose exec postgres createdb -U dndcm dndcm_test
 ```bash
 cd backend
 npm install
-cp .env.example .env   # DATABASE_URL and TEST_DATABASE_URL; never committed
+cp .env.example .env   # DATABASE_URL, SESSION_SECRET, TEST_DATABASE_URL; never committed
+                       # SESSION_SECRET: openssl rand -base64 48
 
 npx prisma migrate deploy   # bring the app database up to the committed migrations
 npm run start:dev           # API on http://localhost:3000, every route under /api
 npm test                    # jest + supertest against the real test database
 npm run build               # compile to dist/
 ```
+
+The service refuses to start half-configured: if `DATABASE_URL` or
+`SESSION_SECRET` is missing, it exits and names the one it wants rather than
+running with a signing secret of `undefined`.
 
 `GET /api/health` answers only after a query actually reaches Postgres, so a
 200 from it means the whole path is up rather than just Node. Which suite
