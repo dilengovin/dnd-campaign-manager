@@ -24,10 +24,18 @@ Each subproject has its own `package.json` and tooling. The repo root holds shar
 ```bash
 cd frontend
 npm install
+npx playwright install chromium   # browser for the end-to-end harness
+
 npm start          # dev server on http://localhost:4200
-npm test           # vitest
+npm test           # unit suite (vitest + jsdom)
+npm run test:e2e   # end-to-end suite (playwright, real browser)
 npm run build      # production build
 ```
+
+`npm test` is the unit suite alone and stays fast; `npm run test:e2e` drives a
+real browser and starts the dev server itself, reusing one already on port 4200
+if it finds it. Which suite answers which kind of question is recorded in
+`.claude/skills/run-the-app/SKILL.md`.
 
 ## Roadmap
 

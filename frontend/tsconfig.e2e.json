@@ -1,0 +1,15 @@
+/* Typechecking for the end-to-end harness. Kept separate from the app and the
+   unit suite: the e2e specs run under Playwright, not in the browser and not
+   under Vitest, so they share the repo's compiler options and none of its
+   ambient test globals. Run by `npm run typecheck:e2e`. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/e2e",
+    "types": []
+  },
+  "include": [
+    "e2e/**/*.ts",
+    "playwright.config.ts"
+  ]
+}
