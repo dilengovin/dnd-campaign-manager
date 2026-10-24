@@ -1,0 +1,14 @@
+:host { display: block; }
+
+.campaign-list {
+  max-width: 60rem;
+
+  h1 { margin-top: 0; }
+  .muted { color: var(--color-text-muted); }
+
+  .cta {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--color-link);
+  }
+}

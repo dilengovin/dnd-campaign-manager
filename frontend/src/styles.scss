@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+ * Colour roles.
+ *
+ * Every colour in the app is defined here and nowhere else; component
+ * stylesheets reference these and never a literal value. Names describe the
+ * role a colour plays, not the colour it currently is, so re-theming is a
+ * change to these values alone.
+ */
+:root {
+  /* Text */
+  --color-text: #111;
+  --color-text-muted: #6b7280;
+  --color-link: #2563eb;
+
+  /* Surfaces and edges */
+  --color-surface-raised: #fafafa;
+  --color-border: #e5e7eb;
+
+  /* Navigation */
+  --color-nav-item-text: #4b5563;
+  --color-nav-item-hover-surface: #eef2ff;
+  --color-nav-item-selected-surface: #e0e7ff;
+  --color-nav-item-selected-text: #1e3a8a;
+}
