@@ -61,6 +61,15 @@ running with a signing secret of `undefined`.
 answers which kind of question is recorded in
 `.claude/skills/run-the-app/SKILL.md`, for the backend as for the frontend.
 
+`POST /api/auth/register` creates a User from an Email and a password and
+signs them straight in; `GET /api/auth/me` answers with who that is, or 401
+when nobody. The Session rides in an `httpOnly`, `SameSite=Strict`, `Secure`
+cookie that no script can read, so the frontend has no local way to tell
+whether it is signed in and must ask — see
+`docs/adr/0003-a-session-is-an-httponly-cookie.md`. Every state-changing
+request also echoes the `XSRF-TOKEN` cookie back in an `X-XSRF-TOKEN` header,
+which is what Angular's `HttpClient` does on its own.
+
 Schema changes are migrations only: edit `backend/prisma/schema.prisma`, run
 `npx prisma migrate dev --name <what-changed>`, and commit what it writes.
 

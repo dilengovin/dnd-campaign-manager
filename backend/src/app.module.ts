@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import { ENV_FILE_PATH, validateEnvironment } from './config/environment';
+import { CsrfModule } from './csrf/csrf.module';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
 
@@ -19,6 +21,8 @@ import { PrismaModule } from './prisma/prisma.module';
       envFilePath: ENV_FILE_PATH,
       validate: validateEnvironment,
     }),
+    CsrfModule,
+    AuthModule,
     PrismaModule,
     HealthModule,
   ],

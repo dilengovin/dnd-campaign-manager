@@ -1,6 +1,5 @@
-// The schema is empty of models on purpose: this is the walking skeleton.
-// The User arrives with registration; the Campaign arrives in `campaigns-api`,
-// carrying its owner from its first migration (ADR-0002).
+// The Campaign arrives in `campaigns-api`, carrying its owner from its first
+// migration (ADR-0002) rather than having ownership added to it afterwards.
 
 generator client {
   provider = "prisma-client-js"
@@ -9,4 +8,20 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+/// Someone with an account who can sign in. Carries an Email, a password hash
+/// and nothing else — a User has no name, no profile and nothing shown on any
+/// screen, because the Email is only how you sign in (CONTEXT.md).
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  /// Unique at the database level, not merely checked before an insert: two
+  /// simultaneous registrations must lose at the constraint rather than both
+  /// read "no such Email" and race past it.
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
 }
