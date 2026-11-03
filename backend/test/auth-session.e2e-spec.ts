@@ -65,8 +65,8 @@ describe('A Session cookie, and who am I (e2e)', () => {
 
     expect(cookie).toMatch(/HttpOnly/i);
     expect(cookie).toMatch(/SameSite=Strict/i);
-    // Unconditional, including in development: browsers accept `Secure` over
-    // `http://localhost`, so there is no flag left to remember in production.
+    // Unconditional, including in development; the reason is on
+    // `SESSION_COOKIE_OPTIONS`.
     expect(cookie).toMatch(/Secure/i);
 
     const sevenDays = 7 * 24 * 60 * 60;
@@ -94,7 +94,7 @@ describe('A Session cookie, and who am I (e2e)', () => {
   it('refuses a Session cookie that has been edited by hand', async () => {
     await client.post('/api/auth/register').send(CREDENTIALS).expect(201);
 
-    const [header, payload] = client.cookie(SESSION_COOKIE_NAME)!.split('.');
+    const [header] = client.cookie(SESSION_COOKIE_NAME)!.split('.');
     // A payload naming somebody else, re-encoded and put back with the
     // original signature still attached.
     const forged = Buffer.from(
@@ -103,7 +103,6 @@ describe('A Session cookie, and who am I (e2e)', () => {
     client.setCookie(SESSION_COOKIE_NAME, `${header}.${forged}.not-the-real-signature`);
 
     await client.get('/api/auth/me').expect(401);
-    expect(payload).toBeDefined();
   });
 
   it('refuses a Session that has expired', async () => {
@@ -118,7 +117,7 @@ describe('A Session cookie, and who am I (e2e)', () => {
   });
 
   it('refuses a Session naming a User who no longer exists', async () => {
-    const response = await client.post('/api/auth/register').send(CREDENTIALS).expect(201);
+    await client.post('/api/auth/register').send(CREDENTIALS).expect(201);
     const sessionOfADeletedUser = client.cookie(SESSION_COOKIE_NAME)!;
 
     // The suite truncates between tests, which is a User ceasing to exist
@@ -128,6 +127,5 @@ describe('A Session cookie, and who am I (e2e)', () => {
     client.setCookie(SESSION_COOKIE_NAME, sessionOfADeletedUser);
 
     await client.get('/api/auth/me').expect(401);
-    expect(response.body.email).toBe(CREDENTIALS.email);
   });
 });

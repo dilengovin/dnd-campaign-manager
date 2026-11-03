@@ -7,7 +7,11 @@ import { SessionService } from './session.service';
  * Everything behind the guard reads this rather than re-verifying the cookie.
  */
 export interface AuthenticatedRequest extends Request {
-  userId: string;
+  /**
+   * Optional because it is absent until the guard proves it. Anything reading
+   * this sits behind `SessionGuard`, which is the only thing that sets it.
+   */
+  userId?: string;
 }
 
 /**

@@ -123,4 +123,21 @@ describe('Registering a User (e2e)', () => {
     expect(Object.keys(me.body)).toEqual(['id', 'email']);
     expect(JSON.stringify(me.body)).not.toContain('argon2');
   });
+
+  it('treats an Email as the same Email however it was capitalised', async () => {
+    // CONTEXT.md: an Email is "unique across the app". Case is not part of
+    // what makes one Email a different Email, so `Tasha@` and `tasha@` are
+    // one account and not two contending for the same Campaigns.
+    const first = await client
+      .post('/api/auth/register')
+      .send({ email: 'Tasha@Example.com', password: 'a-long-enough-passphrase' })
+      .expect(201);
+
+    expect(first.body.email).toBe('tasha@example.com');
+
+    await client
+      .post('/api/auth/register')
+      .send({ email: 'tasha@example.com', password: 'a-different-passphrase' })
+      .expect(409);
+  });
 });

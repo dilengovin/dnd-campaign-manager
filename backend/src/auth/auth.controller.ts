@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService, UserIdentity } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
-import { CurrentUserId } from './current-user.decorator';
+import { CurrentUserId } from './current-user-id.decorator';
 import { SessionGuard } from './session.guard';
 import { SessionService } from './session.service';
 

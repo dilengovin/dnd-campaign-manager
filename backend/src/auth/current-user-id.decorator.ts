@@ -6,5 +6,7 @@ import type { AuthenticatedRequest } from './session.guard';
  * behind `SessionGuard`, which is what puts it there.
  */
 export const CurrentUserId = createParamDecorator((_data: unknown, context: ExecutionContext) => {
-  return context.switchToHttp().getRequest<AuthenticatedRequest>().userId;
+  // Non-null because the guard refuses the request outright when there is no
+  // Session, so a handler using this decorator is never reached without one.
+  return context.switchToHttp().getRequest<AuthenticatedRequest>().userId!;
 });

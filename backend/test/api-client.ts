@@ -9,8 +9,8 @@ import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '../src/csrf/csrf.constants';
  *
  * Supertest's own agent cannot stand in for this. Every cookie this service
  * sets is marked `Secure`, and the agent will not resend a `Secure` cookie over
- * `http://`, so its jar silently stays empty. Browsers make an exception for
- * localhost, which is exactly why ADR-0003 can set `Secure` unconditionally.
+ * `http://`, so its jar silently stays empty — where a real browser would not,
+ * for the reason recorded on `SESSION_COOKIE_OPTIONS`.
  */
 export class ApiClient {
   private readonly cookies = new Map<string, string>();

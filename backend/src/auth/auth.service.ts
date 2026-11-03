@@ -16,6 +16,19 @@ export interface UserIdentity {
   email: string;
 }
 
+/**
+ * An Email is "unique across the app" (CONTEXT.md), and case is not part of
+ * what makes one Email a different one — the domain of an address is
+ * case-insensitive by definition and no mail provider worth signing in to
+ * treats the local part otherwise. Normalising on the way in is what stops
+ * `Tasha@` and `tasha@` becoming two accounts contending for the same
+ * Campaigns. The spec does not state a casing rule; this is the reading of
+ * user story 24 that keeps its promise.
+ */
+export function normaliseEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
 @Injectable()
 export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
@@ -23,7 +36,7 @@ export class AuthService {
   async register(email: string, password: string): Promise<UserIdentity> {
     try {
       return await this.prisma.user.create({
-        data: { email, passwordHash: await hashPassword(password) },
+        data: { email: normaliseEmail(email), passwordHash: await hashPassword(password) },
         select: { id: true, email: true },
       });
     } catch (error) {
@@ -34,7 +47,7 @@ export class AuthService {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === UNIQUE_CONSTRAINT_VIOLATION
       ) {
-        throw new ConflictException('An account with that email already exists. Sign in instead.');
+        throw new ConflictException('A User with that Email already exists. Sign in instead.');
       }
 
       throw error;
