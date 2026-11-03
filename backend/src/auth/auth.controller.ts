@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService, UserIdentity } from './auth.service';
+import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { CurrentUserId } from './current-user-id.decorator';
 import { SessionGuard } from './session.guard';
@@ -27,6 +28,31 @@ export class AuthController {
     this.session.issue(response, user.id);
 
     return user;
+  }
+
+  @Post('login')
+  // 200 rather than Nest's default 201 for a POST: signing in creates no
+  // resource, it recognises one that was already there.
+  @HttpCode(HttpStatus.OK)
+  async login(
+    @Body() body: LoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<UserIdentity> {
+    const user = await this.auth.authenticate(body.email, body.password);
+
+    this.session.issue(response, user.id);
+
+    return user;
+  }
+
+  /**
+   * A round-trip rather than something the client does locally: the Session
+   * cookie is `httpOnly`, so no script can delete it itself (ADR-0003).
+   */
+  @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  logout(@Res({ passthrough: true }) response: Response): void {
+    this.session.clear(response);
   }
 
   /**

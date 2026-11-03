@@ -43,6 +43,26 @@ export class SessionService {
   }
 
   /**
+   * Takes the Session off the browser making this request, by writing an
+   * already-expired empty cookie over the one it holds.
+   *
+   * Named for what it does and not `revoke`, because it clears the cookie and
+   * nothing more. Per ADR-0003 the Session is a stateless JWT with no
+   * server-side revocation, so a copy of the token taken before this call
+   * still verifies, and goes on verifying until it expires.
+   * The seven-day lifetime is the only control over that, which is the reason
+   * it is seven days.
+   */
+  clear(response: Response): void {
+    // The same attributes it was set with, minus the lifetime. A browser
+    // matches a cookie for replacement on its name, path and domain, so an
+    // overwrite that differed on `path` would leave the original in place and
+    // sign nobody out at all.
+    const { maxAge: _lifetime, ...attributes } = SESSION_COOKIE_OPTIONS;
+    response.clearCookie(SESSION_COOKIE_NAME, attributes);
+  }
+
+  /**
    * The User a request's Session belongs to, or `undefined` when it carries
    * no Session the signature and expiry both vouch for. One undifferentiated
    * answer on purpose: a forged cookie, a tampered one and an expired one are
